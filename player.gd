@@ -1,0 +1,47 @@
+extends CharacterBody2D
+
+
+const SPEED = 100.0
+
+# Get the gravity from the project settings to be synced with RigidBody nodes
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+
+@onready var animated_sprite_2d = $AnimatedSprite2D
+
+func _physics_process(_delta):
+
+		# Get the input direction and handle the movement/deceleration.
+		var horizontal_direction = Input.get_axis("move_left", "move_right")
+		var vertical_direction = Input.get_axis("move_up", "move_down")
+		
+		# Flip the sprite
+		if horizontal_direction > 0:
+			animated_sprite_2d.flip_h = false
+		elif horizontal_direction < 0:
+			animated_sprite_2d.flip_h = true
+			# need to make one for facing front / back
+		
+		# Play animation - horizontal
+		if horizontal_direction == 0:
+			animated_sprite_2d.play("idle")
+		else:
+			animated_sprite_2d.play("idle") # walking
+
+		if horizontal_direction:
+			velocity.x = horizontal_direction * SPEED
+		else:
+			velocity.x = move_toward(velocity.x, 0, SPEED)
+		
+		
+		# Play animation - vertical
+		if vertical_direction == 0:
+			animated_sprite_2d.play("idle")
+		else:
+			animated_sprite_2d.play("idle") # walking
+
+		if vertical_direction:
+			velocity.y = vertical_direction * SPEED
+		else:
+			velocity.y = move_toward(velocity.y, 0, SPEED)
+		
+		move_and_slide()
