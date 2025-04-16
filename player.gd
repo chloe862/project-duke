@@ -14,30 +14,24 @@ func _physics_process(_delta):
 		var horizontal_direction = Input.get_axis("move_left", "move_right")
 		var vertical_direction = Input.get_axis("move_up", "move_down")
 		
-		# Flip the sprite
-		if horizontal_direction > 0:
-			animated_sprite_2d.flip_h = false
-		elif horizontal_direction < 0:
-			animated_sprite_2d.flip_h = true
-			# need to make one for facing front / back
-		
-		# Play animation - horizontal
-		if horizontal_direction == 0:
+		# Play aminations
+		if vertical_direction == 0 and horizontal_direction == 0:
 			animated_sprite_2d.play("idle")
 		else:
-			animated_sprite_2d.play("idle") # walking
-
+			if horizontal_direction > 0:
+				animated_sprite_2d.play("walk_right")
+			elif horizontal_direction < 0:
+				animated_sprite_2d.play("walk_left")
+			elif vertical_direction > 0:
+				animated_sprite_2d.play("walk_down")
+			elif vertical_direction < 0:
+				animated_sprite_2d.play("walk_up")           
+		
+		# Move player
 		if horizontal_direction:
 			velocity.x = horizontal_direction * SPEED
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
-		
-		
-		# Play animation - vertical
-		if vertical_direction == 0:
-			animated_sprite_2d.play("idle")
-		else:
-			animated_sprite_2d.play("idle") # walking
 
 		if vertical_direction:
 			velocity.y = vertical_direction * SPEED
